@@ -4,10 +4,12 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 
 const testData = await mkdtemp(path.join(tmpdir(), 'freescript-test-'));
-const applicationPath = process.env.FREESCRIPT_APP || '.';
+const launchOptions = process.env.FREESCRIPT_APP
+  ? { executablePath: process.env.FREESCRIPT_APP, args: [`--user-data-dir=${testData}`] }
+  : { args: ['.', `--user-data-dir=${testData}`] };
 let app;
 try {
-  app = await electron.launch({ args: [applicationPath, `--user-data-dir=${testData}`] });
+  app = await electron.launch(launchOptions);
   const page = await app.firstWindow();
   page.setDefaultTimeout(7000);
   const errors = [];

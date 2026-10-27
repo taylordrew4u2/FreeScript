@@ -1,6 +1,7 @@
 appId: com.freescript.desktop
 productName: FreeScript
 copyright: Copyright © 2026 FreeScript contributors
+afterPack: scripts/after-pack.cjs
 directories:
   output: release
   buildResources: build

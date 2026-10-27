@@ -66,6 +66,8 @@ npm run dist:mac
 
 The universal installer is generated in `release/`. App icons are checked in; regenerate them on macOS with `sh scripts/make-icon.sh`.
 
+The packaging script builds in a temporary folder before copying the installer into `release/`. This avoids Finder/File Provider metadata breaking macOS code signatures when the repository is inside Documents or iCloud Drive.
+
 The default configuration applies only an ad hoc signature for local app integrity. It has no Apple Developer ID signature or notarization, so Gatekeeper treats it as an unidentified developer. A future notarized release needs an Apple **Developer ID Application** identity and Apple notarization credentials; an Apple Development certificate is insufficient for distribution through Gatekeeper. Never commit signing credentials.
 
 ## License
