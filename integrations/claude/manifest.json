@@ -20,7 +20,7 @@
     }
   },
   "tools_generated": true,
-  "compatibility": { "platforms": ["darwin", "win32", "linux"], "runtimes": { "node": ">=22.0.0" } },
+  "compatibility": { "platforms": ["darwin"], "runtimes": { "node": ">=22.0.0" } },
   "user_config": {
     "workspace": {
       "type": "directory",

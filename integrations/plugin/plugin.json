@@ -15,6 +15,8 @@
         "shortDescription": "A screenwriting room inside your chat.",
         "longDescription": "Format screenplays, revise scenes, analyze dialogue, and export editable drafts. No server-side screenplay library.",
         "developerName": "Taylor Drew",
+        "websiteURL": "https://freescript-ai-companion.onrender.com",
+        "privacyPolicyURL": "https://freescript-ai-companion.onrender.com/privacy",
         "category": "Productivity",
         "brandColor": "#342f29",
         "composerIcon": "./assets/icon.png",

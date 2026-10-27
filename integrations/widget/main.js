@@ -21,7 +21,8 @@ function render(result) {
     }
     paper.append(el);
   });
-  $('#stats').textContent = `${data.analysis?.words ?? '—'} words · ${scene} scenes · ~${data.analysis?.estimatedPages ?? '—'} pages (estimate) · Not saved on server`;
+  const pages = data.analysis?.estimatedPages;
+  $('#stats').textContent = `${data.analysis?.words ?? '—'} words · ${scene} ${scene === 1 ? 'scene' : 'scenes'} · ~${pages ?? '—'} ${pages === 1 ? 'page' : 'pages'} (estimate) · Not saved on server`;
 }
 async function copy(kind) {
   if (!current) { $('#status').textContent = 'Prepare a screenplay first.'; return; }

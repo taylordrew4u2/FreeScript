@@ -2,6 +2,12 @@
 
 A free, offline screenwriting app for Mac. Cream paper, dark ink, and a simple typewriter interface. No account, subscription, or writing limits.
 
+## ChatGPT and Claude companion
+
+FreeScript also has a [hosted AI companion](https://freescript-ai-companion.onrender.com) and an [installable Claude Desktop extension](https://github.com/taylordrew4u2/FreeScript/releases/download/plugins-v0.1.0/FreeScript-Claude-0.1.0.mcpb).
+
+Use `https://freescript-ai-companion.onrender.com/mcp` as a custom MCP plugin/connector in ChatGPT or Claude, with no authentication. It formats, revises, analyzes, and exports screenplay text without keeping a server-side library. The free host may take longer to respond after inactivity. See [installation and privacy details](integrations/README.md).
+
 ## Download for Mac
 
 Download **[FreeScript for Mac (.dmg)](https://github.com/taylordrew4u2/FreeScript/releases/latest/download/FreeScript-1.0.2-Mac-universal.dmg)**.

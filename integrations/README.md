@@ -2,6 +2,12 @@
 
 Screenwriting tools for ChatGPT, Claude web, and Claude Desktop. Includes screenplay formatting, scene revision, dialogue/character analysis, and Fountain, FreeScript JSON, and print-ready HTML export. MCP Apps-compatible hosts can show an interactive typewriter preview.
 
+**Live connector:** [freescript-ai-companion.onrender.com](https://freescript-ai-companion.onrender.com)
+
+**MCP server URL:** `https://freescript-ai-companion.onrender.com/mcp`
+
+**Downloads:** [Claude Desktop installer](https://github.com/taylordrew4u2/FreeScript/releases/download/plugins-v0.1.0/FreeScript-Claude-0.1.0.mcpb) · [Portable ChatGPT plugin package](https://github.com/taylordrew4u2/FreeScript/releases/download/plugins-v0.1.0/FreeScript-ChatGPT-Plugin-0.1.0.zip)
+
 ## ChatGPT
 
 Open the hosted FreeScript connector's home page for its MCP URL and current setup instructions. In ChatGPT web, open **Plugins → + → Add custom MCP server**, enter the HTTPS URL ending in `/mcp`, and choose **No authentication**. Review the connection details, create the plugin, and install it before mentioning FreeScript in a chat. Account and workspace permissions apply.
@@ -47,10 +53,13 @@ From the repository root:
 npm --prefix integrations ci --include=dev
 npm --prefix integrations run build
 npm --prefix integrations test
+npm --prefix integrations run test:widget  # requires the root project's Electron/Playwright development dependencies
 npm --prefix integrations start
 ```
 
 The HTTP endpoint is `/mcp` and the health endpoint is `/health`. It binds to `PORT` (default `8787`) on `0.0.0.0`. The local stdio server is `integrations/dist/stdio.cjs`; set `FREESCRIPT_WORKSPACE` to the allowed folder.
+
+The packaged local extension currently targets macOS. The hosted connector is independent of your device's operating system.
 
 To build the installable artifacts on Mac or Linux with `zip` installed:
 

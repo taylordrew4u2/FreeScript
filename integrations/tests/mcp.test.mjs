@@ -4,11 +4,18 @@ import { mkdtemp, rm, readFile, writeFile, symlink } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { createRequire } from 'node:module';
+import { Script } from 'node:vm';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
 
 const draft = 'Title: The last train\nAuthor: A Writer\n\nINT. STATION - NIGHT\n\nA clock ticks.\n\nJUNE\nWe still have time.\n\nEXT. PLATFORM - NIGHT\n\nThe train arrives.';
+test('Packaged widget contains valid inline JavaScript without template replacement corruption', async () => {
+  const html = await readFile('generated/widget.html', 'utf8');
+  const script = html.slice(html.indexOf('<script>') + 8, html.lastIndexOf('</script>'));
+  assert.doesNotThrow(() => new Script(script));
+  assert.equal((html.match(/<\/script/gi) || []).length, 1);
+});
 async function localClient(t) {
   const workspace = await mkdtemp(join(tmpdir(), 'freescript-mcp-'));
   const client = new Client({ name: 'test-writer', version: '1.0.0' });
