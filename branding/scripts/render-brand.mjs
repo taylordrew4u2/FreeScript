@@ -4,6 +4,7 @@ const app=await electron.launch({args:[resolve('branding/scripts/render-main.cjs
 try {
  const page=await app.firstWindow();
  for(const [name,width,height] of [['banner',1920,1080],['social-square',1080,1080],['social-story',1080,1920],['readme-hero',1600,740],['campaign-poster',1600,1000],['brand-overview',1600,1200],['end-card',1920,1080]]) {
+  if(process.argv[2] && name!==process.argv[2]) continue;
   await app.evaluate(({BrowserWindow},{width,height})=>BrowserWindow.getAllWindows()[0].setContentSize(width,height),{width,height});
   await page.setViewportSize({width,height});
   await page.goto('file://'+resolve(`branding/promotional/${name}.html`));
