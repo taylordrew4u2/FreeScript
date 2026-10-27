@@ -2,7 +2,7 @@
 
 ![FreeScript — Your story. Your page. Free screenwriting for Mac.](branding/promotional/readme-hero.png)
 
-**Your story. Your page.** Write your screenplay easily, with formatting that follows as you write. FreeScript is a free, offline Mac editor with a simple cream-paper, dark-ink workspace.
+**Your story. Your page.** Write your screenplay. Let FreeScript handle the formatting. A free, offline editor for Mac, with a quiet paper-and-ink workspace, simple keyboard controls, and local autosave.
 
 **[Download for Mac (.dmg)](https://github.com/taylordrew4u2/FreeScript/releases/download/v1.0.3/FreeScript-1.0.3-Mac-universal.dmg)** · **[Watch the demos](https://customtechbuilt4u.com/work/freescript/#project-promotion)** · **[ChatGPT & Claude setup](integrations/README.md)** · **[Brand & press kit](https://github.com/taylordrew4u2/FreeScript/releases/tag/brand-kit-v1)**
 
@@ -11,7 +11,7 @@ Free desktop software. No account or subscription required for the Mac editor. Y
 ## Write your screenplay. Let the formatting follow.
 
 1. **Start writing.** Create a screenplay and write your first scene. FreeScript applies screenplay styling to scene headings, action, character cues, dialogue, parentheticals, and transitions.
-2. **Keep the formatting simple.** Press Enter to move to the next screenplay element. Use Tab or the format menu to change its type. Spend your time on the story instead of adjusting margins and spacing.
+2. **Let the formatting follow.** Press Enter to move to the next screenplay element. Use Tab or the format menu to change its type. FreeScript takes care of the margins, spacing, and styling for each element.
 3. **Keep your story moving.** Navigate scenes, search, enter focus mode, and let your draft autosave locally. Export Fountain, a JSON backup, or a formatted screenplay PDF when ready.
 
 Already have a draft? **Paste a script** or import a text-based PDF, Fountain, plain text, or a FreeScript backup, then review the formatting and continue writing. Scanned PDFs need OCR first.
