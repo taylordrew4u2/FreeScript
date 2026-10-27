@@ -70,6 +70,21 @@ The packaging script builds in a temporary folder before copying the installer i
 
 The default configuration applies only an ad hoc signature for local app integrity. It has no Apple Developer ID signature or notarization, so Gatekeeper treats it as an unidentified developer. A future notarized release needs an Apple **Developer ID Application** identity and Apple notarization credentials; an Apple Development certificate is insufficient for distribution through Gatekeeper. Never commit signing credentials.
 
+To build with a Developer ID identity installed alongside its private key in Keychain:
+
+```sh
+FREESCRIPT_SIGNING_IDENTITY='Developer ID Application: Your Name (TEAMID)' npm run dist:mac
+```
+
+To also notarize and staple the app before packaging, save notarization credentials with `xcrun notarytool store-credentials`, then pass their profile name:
+
+```sh
+FREESCRIPT_SIGNING_IDENTITY='Developer ID Application: Your Name (TEAMID)' \
+APPLE_KEYCHAIN_PROFILE=FreeScript npm run dist:mac
+```
+
+The profile stays in your Keychain. Do not put app-specific passwords, private keys, or `.p12` files in this repository.
+
 ## License
 
 [MIT](LICENSE). Electron and other dependencies retain their own licenses.

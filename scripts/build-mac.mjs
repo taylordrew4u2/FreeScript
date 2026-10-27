@@ -6,12 +6,14 @@ import { createRequire } from 'node:module';
 
 if (process.platform !== 'darwin') throw new Error('Build the Mac DMG on macOS.');
 const require = createRequire(import.meta.url);
+const signingIdentity = process.env.FREESCRIPT_SIGNING_IDENTITY?.trim().replace(/^Developer ID Application:\s*/, '');
+const signingArguments = signingIdentity ? [`--config.mac.identity=${signingIdentity}`, '--config.forceCodeSigning=true'] : [];
 // Build outside Documents/iCloud/File Provider folders: Finder metadata can
 // otherwise reappear during codesigning and invalidate the application bundle.
 const temporaryOutput = await mkdtemp(join(tmpdir(), 'freescript-build-'));
 try {
-  const child = spawn(process.execPath, [require.resolve('electron-builder/cli.js'), '--mac', 'dmg', '--universal', `--config.directories.output=${temporaryOutput}`], {
-    stdio: 'inherit', env: { ...process.env, CSC_IDENTITY_AUTO_DISCOVERY: 'false' },
+  const child = spawn(process.execPath, [require.resolve('electron-builder/cli.js'), '--mac', 'dmg', '--universal', `--config.directories.output=${temporaryOutput}`, ...signingArguments], {
+    stdio: 'inherit', env: { ...process.env, CSC_IDENTITY_AUTO_DISCOVERY: signingIdentity ? 'true' : 'false' },
   });
   const code = await new Promise((resolve, reject) => { child.once('error', reject); child.once('exit', resolve); });
   if (code !== 0) throw new Error(`Mac packaging failed with exit code ${code}.`);
