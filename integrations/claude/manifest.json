@@ -1,0 +1,33 @@
+{
+  "manifest_version": "0.3",
+  "name": "freescript",
+  "display_name": "FreeScript",
+  "version": "0.1.0",
+  "description": "Create, revise, analyze, and export screenplays with FreeScript.",
+  "long_description": "A free screenwriting companion with a classic typewriter preview. Format screenplay elements, revise individual scenes, analyze characters and dialogue, and export Fountain, FreeScript JSON, or print-ready HTML. This local extension can also read and save .fountain files in the folder you choose. It does not access the Mac app's internal autosave library; exchange scripts using Fountain or JSON import/export.",
+  "author": { "name": "Taylor Drew" },
+  "homepage": "https://github.com/taylordrew4u2/FreeScript",
+  "repository": { "type": "git", "url": "https://github.com/taylordrew4u2/FreeScript.git" },
+  "license": "MIT",
+  "icon": "icon.png",
+  "server": {
+    "type": "node",
+    "entry_point": "server/stdio.cjs",
+    "mcp_config": {
+      "command": "node",
+      "args": ["${__dirname}/server/stdio.cjs"],
+      "env": { "FREESCRIPT_WORKSPACE": "${user_config.workspace}" }
+    }
+  },
+  "tools_generated": true,
+  "compatibility": { "platforms": ["darwin", "win32", "linux"], "runtimes": { "node": ">=22.0.0" } },
+  "user_config": {
+    "workspace": {
+      "type": "directory",
+      "title": "Screenplay folder",
+      "description": "The folder where FreeScript can read and save .fountain files. Other folders and the Mac app's internal library are not accessed.",
+      "default": "${HOME}/Documents/FreeScript",
+      "required": true
+    }
+  }
+}

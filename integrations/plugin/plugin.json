@@ -1,0 +1,26 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "freescript",
+  "version": "0.1.0",
+  "description": "Create, revise, analyze, and export screenplays with a classic typewriter preview.",
+  "author": { "name": "Taylor Drew" },
+  "repository": "https://github.com/taylordrew4u2/FreeScript",
+  "homepage": "https://github.com/taylordrew4u2/FreeScript/tree/main/integrations",
+  "license": "MIT",
+  "keywords": ["screenwriting", "screenplay", "fountain", "creative-writing"],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "FreeScript",
+        "shortDescription": "A screenwriting room inside your chat.",
+        "longDescription": "Format screenplays, revise scenes, analyze dialogue, and export editable drafts. No server-side screenplay library.",
+        "developerName": "Taylor Drew",
+        "category": "Productivity",
+        "brandColor": "#342f29",
+        "composerIcon": "./assets/icon.png",
+        "logo": "./assets/icon.png",
+        "defaultPrompt": ["Use FreeScript to draft a scene from my premise.", "Use FreeScript to analyze the dialogue in my screenplay."]
+      }
+    }
+  }
+}

@@ -1,0 +1,84 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { mkdtemp, rm, readFile, writeFile, symlink } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join, resolve } from 'node:path';
+import { createRequire } from 'node:module';
+import { Client } from '@modelcontextprotocol/sdk/client/index.js';
+import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
+import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
+
+const draft = 'Title: The last train\nAuthor: A Writer\n\nINT. STATION - NIGHT\n\nA clock ticks.\n\nJUNE\nWe still have time.\n\nEXT. PLATFORM - NIGHT\n\nThe train arrives.';
+async function localClient(t) {
+  const workspace = await mkdtemp(join(tmpdir(), 'freescript-mcp-'));
+  const client = new Client({ name: 'test-writer', version: '1.0.0' });
+  const transport = new StdioClientTransport({ command: process.execPath, args: [resolve('dist/stdio.cjs')], env: { ...process.env, FREESCRIPT_WORKSPACE: workspace }, stderr: 'pipe' });
+  await client.connect(transport);
+  t.after(async () => { await client.close(); await rm(workspace, { recursive: true, force: true }); });
+  return { client, workspace };
+}
+test('Claude stdio server exposes tools, previews and creative prompt without protocol noise', async t => {
+  const { client } = await localClient(t);
+  const tools = await client.listTools();
+  assert.equal(tools.tools.length, 7);
+  assert.equal(tools.tools.find(t => t.name === 'save_screenplay').annotations.readOnlyHint, false);
+  const result = await client.callTool({ name: 'analyze_screenplay', arguments: { fountain: draft } });
+  assert.equal(result.structuredContent.analysis.scenes.length, 2);
+  assert.equal(result.structuredContent.analysis.characters[0].name, 'JUNE');
+  assert.equal(result.structuredContent.analysis.characters[0].dialogueWords, 4);
+  const resources = await client.listResources();
+  const preview = await client.readResource({ uri: resources.resources[0].uri });
+  assert.equal(preview.contents[0].mimeType, 'text/html;profile=mcp-app');
+  assert.match(preview.contents[0].text, /THE WRITING ROOM/);
+  assert.equal((await client.listPrompts()).prompts[0].name, 'develop-scene');
+});
+test('Scene revision preserves untouched scenes and exports importable JSON and escaped HTML', async t => {
+  const { client } = await localClient(t);
+  const revised = await client.callTool({ name: 'revise_scene', arguments: { fountain: draft, scene_number: 1, replacement_fountain: 'INT. STATION - NIGHT\n\nA bell rings.\n\nJUNE\nWe missed it.' } });
+  const fountain = revised.structuredContent.fountain;
+  assert.match(fountain, /The train arrives/); assert.match(fountain, /We missed it/); assert.doesNotMatch(fountain, /A clock ticks/);
+  assert.equal(revised.structuredContent.document.title, 'The last train');
+  const json = await client.callTool({ name: 'export_screenplay', arguments: { fountain, format: 'freescript-json' } });
+  assert.equal(JSON.parse(json.structuredContent.export.text).blocks[0].type, 'scene');
+  const html = await client.callTool({ name: 'export_screenplay', arguments: { fountain: 'INT. HOUSE - DAY\n\n!<script>alert(1)</script>', format: 'print-html' } });
+  assert.match(html.structuredContent.export.text, /&lt;script&gt;/); assert.doesNotMatch(html.structuredContent.export.text, /<script>/);
+  const invalid = await client.callTool({ name: 'revise_scene', arguments: { fountain: draft, scene_number: 9, replacement_fountain: 'INT. ROOM - DAY' } });
+  assert.equal(invalid.isError, true);
+});
+test('Local saves prevent unreviewed overwrite, stale revisions, path traversal and symlink reads', async t => {
+  const { client, workspace } = await localClient(t);
+  const save = args => client.callTool({ name: 'save_screenplay', arguments: args });
+  assert.equal((await save({ filename: 'train.fountain', fountain: draft })).structuredContent.saved, true);
+  assert.deepEqual(JSON.parse((await client.callTool({ name: 'list_screenplays', arguments: {} })).content[0].text), ['train.fountain']);
+  assert.equal((await save({ filename: 'train.fountain', fountain: 'Changed' })).isError, true);
+  const current = await client.callTool({ name: 'read_screenplay', arguments: { filename: 'train.fountain' } });
+  const revision = current.structuredContent.revision;
+  assert.equal((await save({ filename: 'train.fountain', fountain: draft + '\n\n!A new ending.', expected_revision: revision })).structuredContent.saved, true);
+  assert.equal((await save({ filename: 'train.fountain', fountain: 'Stale change', expected_revision: revision })).isError, true);
+  assert.equal((await save({ filename: '../outside.fountain', fountain: draft })).isError, true);
+  await writeFile(join(workspace, 'private.txt'), 'DO NOT READ');
+  await symlink(join(workspace, 'private.txt'), join(workspace, 'link.fountain'));
+  const linked = await client.callTool({ name: 'read_screenplay', arguments: { filename: 'link.fountain' } });
+  assert.equal(linked.isError, true); assert.doesNotMatch(JSON.stringify(linked), /DO NOT READ/);
+  assert.match(await readFile(join(workspace, 'train.fountain'), 'utf8'), /A new ending/);
+});
+test('Hosted Streamable HTTP supports independent clients and never exposes local file access', { timeout: 20000 }, async t => {
+  process.env.FREESCRIPT_NO_LISTEN = '1';
+  const require = createRequire(import.meta.url);
+  const { createHTTPApp } = require('../dist/http.cjs');
+  const listener = createHTTPApp().listen(0, '127.0.0.1');
+  await new Promise(resolve => listener.once('listening', resolve));
+  const origin = `http://127.0.0.1:${listener.address().port}`;
+  const clients = [new Client({ name: 'chatgpt-test', version: '1' }), new Client({ name: 'claude-web-test', version: '1' })];
+  t.after(async () => { await Promise.allSettled(clients.map(client => client.close())); listener.closeAllConnections(); await new Promise(resolve => listener.close(resolve)); });
+  for (const client of clients) await client.connect(new StreamableHTTPClientTransport(new URL(origin + '/mcp')));
+  const tools = (await clients[0].listTools()).tools;
+  assert.equal(tools.length, 4); assert.equal(tools.some(t => t.name === 'read_screenplay'), false);
+  const result = await clients[0].callTool({ name: 'create_screenplay', arguments: { title: 'A new draft', elements: [{ type: 'scene', text: 'INT. ROOM - DAY' }, { type: 'action', text: 'A door opens.' }] } });
+  assert.equal(result.structuredContent.storage, 'not-saved');
+  assert.equal((await clients[1].callTool({ name: 'analyze_screenplay', arguments: { fountain: draft } })).structuredContent.document.title, 'The last train');
+  assert.equal((await fetch(origin + '/health')).status, 200);
+  assert.equal((await fetch(origin + '/mcp', { method: 'OPTIONS', headers: { Origin: 'https://evil.example' } })).status, 403);
+  assert.equal((await fetch(origin + '/mcp', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{bad' })).status, 400);
+  assert.equal((await fetch(origin + '/mcp', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: 'a'.repeat(2_100_000) }) })).status, 413);
+});

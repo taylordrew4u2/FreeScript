@@ -6,3 +6,5 @@ release/
 *.p12
 *.pfx
 *.key.pem
+integrations/generated/
+integrations/bundles/
