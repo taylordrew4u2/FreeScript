@@ -1,0 +1,15 @@
+file '../promotional/banner.png'
+duration 3
+file '../promotional/workflow-1.png'
+duration 5
+file '../promotional/workflow-2.png'
+duration 5
+file '../promotional/workflow-3.png'
+duration 4
+file '../promotional/workflow-4.png'
+duration 5
+file '../promotional/workflow-5.png'
+duration 5
+file '../promotional/end-card.png'
+duration 4
+file '../promotional/end-card.png'

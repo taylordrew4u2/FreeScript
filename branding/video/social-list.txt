@@ -1,0 +1,7 @@
+file '../promotional/portrait-1.png'
+duration 5
+file '../promotional/portrait-2.png'
+duration 5
+file '../promotional/portrait-3.png'
+duration 5
+file '../promotional/portrait-3.png'

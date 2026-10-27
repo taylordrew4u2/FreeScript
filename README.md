@@ -1,44 +1,79 @@
 # FreeScript
 
-A free, offline screenwriting app for Mac. Cream paper, dark ink, and a simple typewriter interface. No account, subscription, or writing limits.
+![FreeScript — Your story. Your page. Free screenwriting for Mac.](branding/promotional/readme-hero.png)
+
+**Your story. Your page.** A free, offline screenplay editor for Mac. Paste a draft or import a text-based PDF, then keep writing in a cream-paper, dark-ink workspace.
+
+**[Download for Mac (.dmg)](https://github.com/taylordrew4u2/FreeScript/releases/download/v1.0.3/FreeScript-1.0.3-Mac-universal.dmg)** · **[Watch the demos](https://customtechbuilt4u.com/work/freescript/#project-promotion)** · **[ChatGPT & Claude setup](integrations/README.md)** · **[Brand & press kit](https://github.com/taylordrew4u2/FreeScript/releases/tag/brand-kit-v1)**
+
+Free desktop software. No account or subscription required for the Mac editor. Your drafts autosave on your Mac.
+
+## From an existing script to the next scene
+
+1. **Bring your draft.** Use **Paste a script**, or **Import PDF or screenplay** for a PDF with selectable text, Fountain, plain text, or a FreeScript JSON backup.
+2. **Find the format.** FreeScript recognizes common scene headings, action, character cues, dialogue, parentheticals, and transitions. Review the result and adjust an element with the format menu or Tab.
+3. **Keep writing.** Navigate scenes, search, enter focus mode, undo edits, and export Fountain, a JSON backup, or a US Letter screenplay PDF with a title page.
+
+| Paste your script | Keep writing |
+| --- | --- |
+| ![Actual app: paste a fictional script into the text box.](branding/screenshots/paste-script.png) | ![Actual app: the fictional script becomes editable screenplay elements.](branding/screenshots/formatted-script.png) |
+
+All product captures use fictional sample writing. No private manuscript is shown.
+
+## See it in motion
+
+[![Captioned FreeScript workflow demonstration using actual app captures.](branding/promotional/workflow-preview.gif)](https://customtechbuilt4u.com/work/freescript/#project-promotion)
+
+**[Watch the 31-second workflow demo and 15-second vertical promo](https://customtechbuilt4u.com/work/freescript/#project-promotion)**. Both are silent, captioned motion presentations assembled from genuine app captures, with fictional writing. They are edited product demonstrations rather than uncut screen recordings.
+
+Download the [landscape MP4](https://github.com/taylordrew4u2/FreeScript/releases/download/brand-kit-v1/FreeScript-workflow-demo.mp4), [vertical MP4](https://github.com/taylordrew4u2/FreeScript/releases/download/brand-kit-v1/FreeScript-social-promo.mp4), or read the [workflow captions](branding/video/workflow-demo.vtt).
+
+## The writing room
+
+![Actual FreeScript Mac app: a fictional screenplay, scene navigation, format menu, local save status and export control.](branding/screenshots/writing-room.png)
+
+- Native Mac menus, keyboard shortcuts, spellcheck, focus mode, and zoom.
+- Multiple screenplays with scene navigation, search, local autosave, and undo/redo.
+- Automatic formatting for pasted drafts and editable text-based PDF imports.
+- Fountain import/export, complete JSON backups, and formatted PDF export.
+- A universal Mac installer for Apple Silicon and Intel.
 
 ## ChatGPT and Claude companion
 
-FreeScript also has a [hosted AI companion](https://freescript-ai-companion.onrender.com) and an [installable Claude Desktop extension](https://github.com/taylordrew4u2/FreeScript/releases/download/plugins-v0.1.0/FreeScript-Claude-0.1.0.mcpb).
+The separate [hosted FreeScript companion](https://freescript-ai-companion.onrender.com) formats, revises, analyzes, and exports screenplay text in ChatGPT and Claude. The assistant supplies creative text; the tools structure and transform it. No separate AI API key is required.
 
-Use `https://freescript-ai-companion.onrender.com/mcp` as a custom MCP plugin/connector in ChatGPT or Claude, with no authentication. It formats, revises, analyzes, and exports screenplay text without keeping a server-side library. The free host may take longer to respond after inactivity. See [installation and privacy details](integrations/README.md).
+Use `https://freescript-ai-companion.onrender.com/mcp` as a custom MCP plugin/connector, with **No authentication**. An [optional local Claude Desktop extension](https://github.com/taylordrew4u2/FreeScript/releases/download/plugins-v0.1.0/FreeScript-Claude-0.1.0.mcpb) can work with Fountain files in a separately chosen folder.
 
-## Download for Mac
+The hosted companion is online and stateless. Chat provider account requirements and the free host's limits apply; the service can take longer to respond after inactivity. Your Mac autosave library and the chat companion are separate: transfer drafts through import/export. **There is no automatic sync.** See [installation and privacy details](integrations/README.md).
 
-Download **[FreeScript for Mac (.dmg)](https://github.com/taylordrew4u2/FreeScript/releases/latest/download/FreeScript-1.0.3-Mac-universal.dmg)**.
+## Install on Mac
 
-Requires **macOS 13 Ventura or later**. One universal installer supports Apple Silicon and Intel Macs. The release is tested on Apple Silicon; Intel execution has not been tested on physical hardware.
+Requires **macOS 13 Ventura or later**. The universal installer supports Apple Silicon and Intel; runtime testing was on Apple Silicon, with physical Intel testing pending.
 
-1. Open the `.dmg` and drag **FreeScript** to **Applications**.
-2. Open FreeScript from Applications.
-3. This release is **Developer ID signed but not notarized**. macOS may still block it. If so, use **System Settings → Privacy & Security → Open Anyway** after attempting to open the app. Only do this for a copy you trust from this repository.
+1. Open the [FreeScript DMG](https://github.com/taylordrew4u2/FreeScript/releases/download/v1.0.3/FreeScript-1.0.3-Mac-universal.dmg).
+2. Drag **FreeScript** into **Applications**, then open it.
+3. This release is **Developer ID signed, not notarized**. If macOS blocks it, review **System Settings → Privacy & Security** after attempting to open it, and only allow a copy you trust from this repository.
 
-## Write
+Scanned PDFs need OCR first. Imports are limited to 10 MB, and automatically inferred formatting should be reviewed. Advanced Fountain markup is not fully supported. The editor uses a continuous writing surface; page counts are estimates, while PDF export determines final pagination.
 
-- Scene headings, action, character cues, dialogue, parentheticals, and transitions.
-- **Enter** creates the next screenplay element. **Tab / Shift Tab** changes its type.
-- Scene navigation and search, multiple screenplays, focus mode, zoom, and undo/redo.
-- Local autosave; export a FreeScript JSON backup to keep an independent copy.
-- Paste a complete script to automatically format editable screenplay elements.
-- Import text-based PDFs, Fountain, plain text, or FreeScript JSON backups. Scanned PDFs need text recognition first; review inferred formatting after import.
-- Export editable Fountain or a US Letter PDF with a title page.
-- Native Mac menus, keyboard shortcuts, file save dialogs, and spellcheck.
+The desktop editor works offline and stores drafts in its local application data. Removing that data removes the drafts, so export independent backups regularly. The desktop app has no telemetry or cloud sync. The optional hosted chat companion has its own [privacy details](integrations/README.md#privacy-and-limits).
 
-Scripts stay in the app's local storage on your Mac. Removing app data removes those scripts; export backups regularly. There is no server, telemetry, or cloud sync. The desktop application does not require an internet connection.
+## Identity & promotional material
 
-The editor uses a continuous writing surface. Page counts and running times are estimates; the PDF has final page breaks. Fountain support covers common screenplay elements, not the full Fountain specification (for example, dual dialogue, rich-text markup, sections, and notes).
+![FreeScript's typewriter identity, paper-and-ink palette, typography and campaign system.](branding/promotional/brand-overview.png)
+
+The brand kit includes SVG/PNG logo variants, the original app icon, design tokens, brand guidelines, a 1920 × 1080 banner, square and vertical social graphics, editorial campaign artwork, genuine screenshots, launch copy, and both captioned videos. The campaign photograph is AI-generated promotional imagery, not an app capture or a physical FreeScript product.
+
+**[Download the complete brand kit](https://github.com/taylordrew4u2/FreeScript/releases/download/brand-kit-v1/FreeScript-brand-and-promo-kit.zip)** · [Brand guidelines](branding/BRAND-GUIDELINES.md) · [Launch copy](branding/PROMOTIONAL-COPY.md) · [Asset provenance](branding/ASSET-MANIFEST.md)
+
+See the full project and media gallery in the [4u Digital portfolio](https://customtechbuilt4u.com/work/freescript/).
 
 ## Keyboard shortcuts
 
 | Action | Shortcut |
 | --- | --- |
 | New screenplay | ⌘ N |
-| Import | ⌘ O |
+| Import PDF / screenplay | ⌘ O |
 | Export / save backup | ⌘ S |
 | Export PDF | ⌘ P |
 | Undo / redo | ⌘ Z / ⌘ Shift Z |
@@ -48,7 +83,7 @@ The editor uses a continuous writing surface. Page counts and running times are 
 | Change element type | Tab / Shift Tab |
 | New line in the same element | Shift Enter |
 
-Select All within the editor selects the current element. Use Fountain export to copy the full screenplay to another app.
+Select All in the editor selects the current element. Use Fountain export to copy the complete screenplay to another app.
 
 ## Develop
 

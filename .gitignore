@@ -8,3 +8,8 @@ release/
 *.key.pem
 integrations/generated/
 integrations/bundles/
+
+# Temporary media renders; publish the edited deliverables only.
+branding/video/raw/
+branding/video/workflow-raw.webm
+branding/video/segments/

@@ -1,0 +1,55 @@
+import { _electron as electron, expect } from '@playwright/test';
+import { mkdtemp, mkdir, rm, rename } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
+const root = process.cwd();
+const storage = await mkdtemp(path.join(tmpdir(), 'freescript-brand-demo-'));
+await mkdir('branding/video/raw', {recursive:true});
+const app = await electron.launch({args:['.', `--user-data-dir=${storage}`]});
+let video;
+try {
+ const page = await app.firstWindow();
+ await app.evaluate(({BrowserWindow}) => BrowserWindow.getAllWindows()[0].setContentSize(1440,1000));
+ await page.setViewportSize({width:1440,height:1000});
+ await expect(page.locator('#rename')).toHaveText('The way back');
+ await page.screenshot({path:'branding/screenshots/writing-room.png',scale:'css'});
+
+ await page.waitForTimeout(1700);
+ await page.locator('#paste-script').click();
+ await page.locator('#paste-form [name=title]').fill('The last train');
+ await page.locator('#paste-text').fill('EXT. RAILWAY PLATFORM - NIGHT\n\nThe station clock ticks toward midnight. MAYA waits with a small suitcase.\n\nMAYA\nI thought I was the only one.\n\nLEO\nSo did I.\n\nA distant light appears beyond the bend.\n\nINT. LAST TRAIN - CONTINUOUS\n\nTwo strangers find a seat by the window.\n\nMAYA\nWhere are you going?\n\nLEO\nSomewhere new.');
+ await page.screenshot({path:'branding/screenshots/paste-script.png',scale:'css'});
+ await page.waitForTimeout(2200);
+ await page.locator('#paste-form .primary').click();
+ await expect(page.locator('.script-block.scene')).toHaveCount(2);
+ await page.waitForTimeout(5600);
+ await page.locator('.scene-item').first().click();
+ await page.waitForTimeout(500);
+ await page.screenshot({path:'branding/screenshots/formatted-script.png',scale:'css'});
+ await page.locator('.script-block.dialogue').last().press('End');
+ await page.keyboard.type(' You?', {delay:130});
+ await page.keyboard.press('Enter');
+ await page.keyboard.type('Maya smiles as the platform disappears.',{delay:65});
+ await page.waitForTimeout(1700);
+ await page.locator('#focus').click(); await page.waitForTimeout(1000);
+ await page.screenshot({path:'branding/screenshots/focus-mode.png',scale:'css'});
+ await page.waitForTimeout(1600); await page.keyboard.press('Escape');
+ const pdf=path.join(storage,'The last train.pdf');
+ await app.evaluate(({dialog}, filePath)=>{dialog.showSaveDialog=async()=>({canceled:false,filePath});},pdf);
+ await page.locator('#export').click(); await page.waitForTimeout(900);
+ await page.screenshot({path:'branding/screenshots/export-options.png',scale:'css'});
+ await page.locator('#export-pdf').click();
+ await expect(page.locator('#toast')).toContainText('PDF saved');
+ await page.waitForTimeout(1000);
+ await page.locator('#file-input').setInputFiles(pdf);
+ await expect(page.locator('#toast')).toContainText('Ready to keep writing');
+ await page.locator('.script-block.dialogue').last().press('End');
+ await page.keyboard.type(' A fresh start.',{delay:90});
+ await page.waitForTimeout(1200);
+ await page.screenshot({path:'branding/screenshots/pdf-import.png',scale:'css'});
+ console.log('Captured genuine app screens and editable PDF import; fictional sample only.');
+} finally {
+ await app.close();
+ if(video) await video.saveAs(path.join(root,'branding/video/workflow-raw.webm'));
+ await rm(storage,{recursive:true,force:true});
+}
