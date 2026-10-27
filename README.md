@@ -4,13 +4,13 @@ A free, offline screenwriting app for Mac. Cream paper, dark ink, and a simple t
 
 ## Download for Mac
 
-Download **[FreeScript for Mac (.dmg)](https://github.com/taylordrew4u2/FreeScript/releases/latest/download/FreeScript-1.0.1-Mac-universal.dmg)**.
+Download **[FreeScript for Mac (.dmg)](https://github.com/taylordrew4u2/FreeScript/releases/latest/download/FreeScript-1.0.2-Mac-universal.dmg)**.
 
 Requires **macOS 13 Ventura or later**. One universal installer supports Apple Silicon and Intel Macs. The release is tested on Apple Silicon; Intel execution has not been tested on physical hardware.
 
 1. Open the `.dmg` and drag **FreeScript** to **Applications**.
 2. Open FreeScript from Applications.
-3. This initial release is **unsigned and not notarized**. If macOS blocks it, use **System Settings → Privacy & Security → Open Anyway** after attempting to open the app. Only do this for a copy you trust from this repository.
+3. This release is **Developer ID signed but not notarized**. macOS may still block it. If so, use **System Settings → Privacy & Security → Open Anyway** after attempting to open the app. Only do this for a copy you trust from this repository.
 
 ## Write
 
