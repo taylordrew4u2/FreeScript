@@ -1,10 +1,10 @@
 # FreeScript
 
-A free, offline screenwriting app for Mac. No account, subscription, or writing limits.
+A free, offline screenwriting app for Mac. Cream paper, dark ink, and a simple typewriter interface. No account, subscription, or writing limits.
 
 ## Download for Mac
 
-Download **[FreeScript for Mac (.dmg)](https://github.com/taylordrew4u2/FreeScript/releases/latest/download/FreeScript-1.0.0-Mac-universal.dmg)**.
+Download **[FreeScript for Mac (.dmg)](https://github.com/taylordrew4u2/FreeScript/releases/latest/download/FreeScript-1.0.1-Mac-universal.dmg)**.
 
 Requires **macOS 13 Ventura or later**. One universal installer supports Apple Silicon and Intel Macs. The release is tested on Apple Silicon; Intel execution has not been tested on physical hardware.
 

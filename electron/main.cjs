@@ -8,7 +8,7 @@ const send = action => mainWindow?.webContents.send('menu-action', action);
 function createWindow() {
   mainWindow = new BrowserWindow({
     title: 'FreeScript', width: 1440, height: 1000, minWidth: 760, minHeight: 620,
-    backgroundColor: '#f0f2eb', titleBarStyle: 'default',
+    backgroundColor: '#f0ece3', titleBarStyle: 'default',
     webPreferences: { preload: path.join(__dirname, 'preload.cjs'), contextIsolation: true, nodeIntegration: false, sandbox: true, spellcheck: true },
     show: false,
   });

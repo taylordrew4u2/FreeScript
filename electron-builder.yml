@@ -20,7 +20,7 @@ mac:
         - universal
 dmg:
   title: FreeScript
-  backgroundColor: '#f0f2eb'
+  backgroundColor: '#eee8dc'
   window:
     width: 540
     height: 360

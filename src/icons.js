@@ -1,5 +1,6 @@
 export function icon(name, size = 20) {
   const paths = {
+    typewriter: '<path d="M7 10V3h10v7M9 6h6M9 8h4M5 10h14l2 10H3Z"/><path d="M7 17h10M7 13h.01M10 13h.01M13 13h.01M16 13h.01M4 10H2V7"/>',
     feather: '<path d="M20 4c-5-2-10 1-12 7l-4 9 9-4c6-2 9-7 7-12Z"/><path d="m4 20 10-10M9 15v-4m4 0h4"/>',
     plus: '<path d="M12 5v14M5 12h14"/>',
     chevron: '<path d="m9 5 7 7-7 7"/>',

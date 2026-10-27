@@ -20,8 +20,8 @@ const btn = (id, label, symbol, cls = '') => `<button id="${id}" class="${cls}" 
 
 document.querySelector('#app').innerHTML = `
   <aside class="sidebar" aria-label="Screenplay navigation">
-    <a class="brand" href="#" aria-label="FreeScript home"><span class="brand-icon">${icon('feather', 25)}</span>FreeScript</a>
-    <div class="workspace-label">YOUR WRITING ROOM</div>
+    <a class="brand" href="#" aria-label="FreeScript home"><span class="brand-icon">${icon('typewriter', 25)}</span>FreeScript</a>
+    <div class="workspace-label">YOUR MANUSCRIPTS</div>
     <button class="project-switch" id="library-toggle" aria-expanded="false"><span class="project-symbol">${icon('file', 20)}</span><span><strong id="project-title"></strong><small>Screenplay</small></span>${icon('down', 16)}</button>
     <div id="library" class="library" hidden></div>
     <button class="new-script" id="new-script">${icon('plus', 17)} New screenplay</button>
@@ -33,12 +33,12 @@ document.querySelector('#app').innerHTML = `
   </aside>
   <main class="main">
     <header class="topbar"><div class="breadcrumb">${btn('mobile-menu', 'Toggle sidebar', 'menu', 'icon-button')}<span>My workspace</span>${icon('chevron', 13)}<button id="rename" class="title-button"></button><span class="draft-badge">DRAFT</span></div><div class="top-actions"><span id="save-status" role="status">${icon('check', 14)} All changes saved</span><button id="export" class="export-button">${icon('download', 16)} Export ${icon('down', 13)}</button></div></header>
-    <section class="writing-top"><div><div class="eyebrow">MAKE SOMETHING WORTH WATCHING</div><h1>Your story starts here<span>.</span></h1><p>One scene. One line. One great idea at a time.</p></div><span class="writing-tag">${icon('sun', 19)} A good day to write</span></section>
+    <section class="writing-top"><div><div class="eyebrow">FREESCRIPT / THE WRITING ROOM</div><h1>FADE IN.</h1><p>A page. A few words. A story.</p></div><span class="writing-tag">${icon('typewriter', 22)} OFFLINE. ON THE PAGE.</span></section>
     <section class="editor-shell" aria-label="Screenplay workspace"><div class="toolbar"><div class="format-group"><span class="toolbar-label">FORMAT</span><select id="block-type" aria-label="Element type">${TYPES.map(t => `<option value="${t}">${LABELS[t]}</option>`).join('')}</select><kbd>Tab</kbd></div><div class="toolbar-right"><span class="paper-size">US Letter</span><span class="toolbar-separator"></span>${btn('title-page', 'Edit title page', 'file', 'icon-button')}${btn('focus', 'Toggle focus mode', 'focus', 'icon-button')}<button id="zoom" title="Change zoom" class="zoom-button">100% ${icon('down', 12)}</button></div></div>
       <div class="paper-scroll" id="paper-scroll"><div class="paper" id="paper"><div class="paper-running"><span id="paper-title"></span><span>1.</span></div><div id="editor" role="group" aria-label="Screenplay editor"></div><div class="paper-end"><span></span> YOUR NEXT SCENE IS WAITING <span></span></div></div></div>
       <footer class="editor-footer"><span><span class="status-dot"></span><span id="draft-status">First draft</span></span><div><span id="word-count"></span><span class="footer-dot">·</span><span id="page-count"></span><span class="footer-dot">·</span><span id="runtime"></span></div><span class="keyboard-hint"><kbd>Enter</kbd> next element <kbd>Tab</kbd> change format</span></footer>
     </section>
-    <div class="under-editor"><span>Give your ideas a place to land.</span><span>FREE TO WRITE. FREE TO CREATE.</span></div>
+    <div class="under-editor"><span>US LETTER / COURIER</span><span>NO ACCOUNT. JUST WRITE.</span></div>
   </main>
   <button id="exit-focus" hidden>${icon('focus', 16)} Exit focus</button>
   <dialog id="modal"><div id="modal-content"></div></dialog><div id="toast" role="status"></div><input type="file" id="file-input" accept=".fountain,.txt,.json" hidden />
