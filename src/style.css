@@ -58,3 +58,5 @@
   .modal-actions .primary { background:#342f29; color:#fffdf6; }
   #toast { background:#342f29; color:#fffdf6; border-radius:3px; }
 }
+
+#paste-text { width: 100%; box-sizing: border-box; resize: vertical; padding: 12px; background: #faf7ef; color: #302c25; border: 1px solid #c9c1b3; border-radius: 6px; font: 13px/1.5 Courier, monospace; }

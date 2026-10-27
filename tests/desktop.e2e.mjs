@@ -89,6 +89,36 @@ try {
   await page.locator('[data-doc]').first().click();
   await expect(page.locator('#rename')).toHaveText('The way back');
   await expect(page.locator('.scene-item')).toHaveCount(3);
+  // Whole-script paste opens a separate editable draft, preserving the library.
+  await page.locator('#paste-script').click();
+  await page.locator('#paste-form [name=title]').fill('Pasted story');
+  await page.locator('#paste-text').fill('INT. HOUSE - DAY\n\nA door opens.\n\nJUNE\nHello again.');
+  await page.locator('#paste-form .primary').click();
+  await expect(page.locator('.script-block.dialogue')).toHaveText('Hello again.');
+  await page.locator('.script-block.dialogue').press('End');
+  await page.keyboard.type(' I am back.');
+  // Use a synthetic clipboard, keeping the user's real clipboard untouched.
+  await page.locator('.script-block.dialogue').evaluate(el => {
+    const range = document.createRange(); range.selectNodeContents(el); range.collapse(false);
+    const selection = window.getSelection(); selection.removeAllRanges(); selection.addRange(range);
+    const clipboardData = new DataTransfer(); clipboardData.setData('text/plain', '\n\nEXT. GARDEN - NIGHT\n\nMAX\nA new scene.');
+    el.dispatchEvent(new ClipboardEvent('paste', { bubbles: true, cancelable: true, clipboardData }));
+  });
+  await expect(page.locator('.script-block.scene')).toHaveCount(2);
+  await page.keyboard.press('Meta+z');
+  await expect(page.locator('.script-block.scene')).toHaveCount(1);
+  await expect(page.locator('.script-block.dialogue')).toHaveText('Hello again. I am back.');
+  console.log('PASS: Paste formatting, continued editing, and undo.');
+  // Reimport the real PDF produced by Electron above, then continue writing.
+  await page.locator('#file-input').setInputFiles(pdfPath);
+  await expect(page.locator('#rename')).toHaveText('export');
+  await expect(page.locator('.script-block.scene')).toContainText('INT. TEST ROOM - DAY');
+  await expect(page.locator('.script-block.dialogue')).toContainText('This is our first line. Another line.');
+  await page.locator('.script-block.dialogue').last().press('End');
+  await page.keyboard.type(' Continuing after PDF import.');
+  await page.waitForTimeout(500); await page.reload();
+  await expect(page.locator('.script-block.dialogue').last()).toContainText('Continuing after PDF import.');
+  console.log('PASS: PDF text extraction, screenplay formatting, continued editing and autosave.');
   expect(errors).toEqual([]);
   console.log('PASS: Desktop launch, editing, formatting, undo/redo, autosave reload, PDF, import, scene search, focus mode, export dialog, and script switching.');
 } catch (error) {

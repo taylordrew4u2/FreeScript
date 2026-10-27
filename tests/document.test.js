@@ -34,3 +34,9 @@ test('Word counts ignore empty elements and page estimates grow with text', () =
   result.blocks.push(block('dialogue', 'word '.repeat(2000)));
   assert.ok(estimatePages(result) > 3);
 });
+
+test('formats pasted indented dialogue and transitions without blank separators', () => {
+  const imported = fromFountain('FADE IN:\nINT. ROOM - NIGHT\nA light flickers.\n    JUNE\n  (quietly)\n  Is anyone here?\n    MAX\n  Only me.\nFADE OUT.');
+  assert.deepEqual(imported.blocks.map(b => b.type), ['transition', 'scene', 'action', 'character', 'parenthetical', 'dialogue', 'character', 'dialogue', 'transition']);
+  assert.equal(imported.blocks[5].text, 'Is anyone here?');
+});

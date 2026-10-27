@@ -25,7 +25,7 @@ document.querySelector('#app').innerHTML = `
     <button class="project-switch" id="library-toggle" aria-expanded="false"><span class="project-symbol">${icon('file', 20)}</span><span><strong id="project-title"></strong><small>Screenplay</small></span>${icon('down', 16)}</button>
     <div id="library" class="library" hidden></div>
     <button class="new-script" id="new-script">${icon('plus', 17)} New screenplay</button>
-    <div class="sidebar-divider"></div>
+    <button class="new-script" id="paste-script">Paste a script</button><button class="new-script" id="import-script">Import PDF or screenplay</button><div class="sidebar-divider"></div>
     <div class="scene-heading"><span>SCENES <b id="scene-count">0</b></span>${btn('add-scene', 'Add scene', 'plus', 'icon-button')}</div>
     <label class="search-box">${icon('scenes', 16)}<input id="scene-search" type="search" placeholder="Find a scene…" aria-label="Find a scene" /><kbd>⌕</kbd></label>
     <nav id="scene-list" aria-label="Scenes"></nav>
@@ -41,7 +41,7 @@ document.querySelector('#app').innerHTML = `
     <div class="under-editor"><span>US LETTER / COURIER</span><span>NO ACCOUNT. JUST WRITE.</span></div>
   </main>
   <button id="exit-focus" hidden>${icon('focus', 16)} Exit focus</button>
-  <dialog id="modal"><div id="modal-content"></div></dialog><div id="toast" role="status"></div><input type="file" id="file-input" accept=".fountain,.txt,.json" hidden />
+  <dialog id="modal"><div id="modal-content"></div></dialog><div id="toast" role="status"></div><input type="file" id="file-input" accept=".pdf,.fountain,.txt,.json" hidden />
 `;
 const $ = selector => document.querySelector(selector);
 const editor = $('#editor');
@@ -207,9 +207,21 @@ editor.addEventListener('paste', event => {
   const selection = window.getSelection();
   if (!selection.rangeCount) return;
   const range = selection.getRangeAt(0);
-  if (!el.contains(range.endContainer)) { toast('Paste into one screenplay element at a time.'); return; }
+  if (!el.contains(range.startContainer) || !el.contains(range.endContainer)) { toast('Paste into one screenplay element at a time.'); return; }
+  const source = event.clipboardData.getData('text/plain');
+  if (/\n/.test(source.trim())) {
+    const parsed = fromFountain(source);
+    const before = range.cloneRange(); before.selectNodeContents(el); before.setEnd(range.startContainer, range.startOffset);
+    const after = range.cloneRange(); after.selectNodeContents(el); after.setStart(range.endContainer, range.endOffset);
+    const original = doc().blocks.find(b => b.id === el.dataset.id);
+    const inserted = [...(before.toString() ? [block(original.type, before.toString())] : []), ...parsed.blocks, ...(after.toString() ? [block(original.type, after.toString())] : [])];
+    histories.get(activeId).lastEdit = 0;
+    doc().blocks.splice(doc().blocks.indexOf(original), 1, ...inserted);
+    renderDocument(); focusBlock(parsed.blocks.at(-1).id); changed(); histories.get(activeId).lastEdit = 0;
+    toast('Pasted script formatted. Keep writing, or use ⌘ Z to undo.'); return;
+  }
   range.deleteContents();
-  const node = document.createTextNode(event.clipboardData.getData('text/plain'));
+  const node = document.createTextNode(source);
   range.insertNode(node); range.setStartAfter(node); range.collapse(true); selection.removeAllRanges(); selection.addRange(range);
   el.dispatchEvent(new Event('input', { bubbles: true }));
 });
@@ -240,6 +252,17 @@ function newScript() {
   $('#new-form').onsubmit = event => { event.preventDefault(); persist(); const data = new FormData(event.target); const next = createDocument(data.get('title').trim() || 'Untitled screenplay'); next.author = data.get('author').trim(); docs.push(next); activeId = next.id; search = ''; $('#scene-search').value = ''; renderDocument(); persist(); closeModal(); focusBlock(next.blocks[0].id); };
 }
 $('#new-script').onclick = newScript;
+$('#import-script').onclick = () => $('#file-input').click();
+$('#paste-script').onclick = () => {
+  openModal(`<h2>Paste your script.</h2><p>Paste your complete script below, then open it as an editable screenplay. Your existing scripts stay in your library.</p><form id="paste-form"><label>Title<input name="title" placeholder="Imported screenplay" /></label><label>Script text<textarea id="paste-text" rows="12" placeholder="INT. COFFEE SHOP - DAY…" required autofocus></textarea></label><p id="paste-summary" role="status">Scene headings, characters and dialogue are formatted automatically.</p><div class="modal-actions"><button type="button" data-close>Cancel</button><button class="primary">Open screenplay</button></div></form>`);
+  $('#paste-text').oninput = () => { const parsed = fromFountain($('#paste-text').value); $('#paste-summary').textContent = `${parsed.blocks.filter(b => b.type === 'scene').length} scenes · ${wordCount(parsed)} words · Ready to edit`; };
+  $('#paste-form').onsubmit = event => { event.preventDefault(); const imported = fromFountain($('#paste-text').value, new FormData(event.target).get('title').trim() || 'Imported screenplay'); addImported(imported); };
+};
+function addImported(imported) {
+  imported.id = crypto.randomUUID(); imported.blocks.forEach(b => { b.id = crypto.randomUUID(); });
+  imported.updatedAt = Date.now();
+  persist(); docs.push(imported); activeId = imported.id; search = ''; $('#scene-search').value = ''; renderDocument(); persist(); closeModal(); focusBlock(imported.blocks.at(-1).id); toast('Screenplay imported. Ready to keep writing.');
+}
 function titlePage() {
   openModal(`<div class="modal-eyebrow">THE TITLE PAGE</div><h2>Make it yours.</h2><p>These details appear on your exported title page.</p><form id="title-form"><label>Screenplay title<input name="title" value="${escape(doc().title)}" maxlength="120" required autofocus /></label><label>Written by<input name="author" value="${escape(doc().author)}" placeholder="Your name" maxlength="120" /></label><div class="modal-actions"><button type="button" data-close>Cancel</button><button class="primary" type="submit">Save details</button></div></form>`);
   $('#title-form').onsubmit = event => { event.preventDefault(); const data = new FormData(event.target); doc().title = data.get('title').trim() || 'Untitled screenplay'; doc().author = data.get('author').trim(); doc().updatedAt = Date.now(); renderDocument(); persist(); closeModal(); };
@@ -273,14 +296,13 @@ $('#file-input').onchange = async event => {
   const file = event.target.files[0]; if (!file) return;
   if (file.size > 10 * 1024 * 1024) { toast('Please choose a screenplay smaller than 10 MB.'); event.target.value = ''; return; }
   try {
-    const source = await file.text();
-    const imported = file.name.endsWith('.json') ? JSON.parse(source) : fromFountain(source, file.name);
+    toast('Opening screenplay…');
+    const isPDF = /\.pdf$/i.test(file.name);
+    const source = isPDF ? await (await import('./pdf-import.js')).extractPDF(await file.arrayBuffer()) : await file.text();
+    const imported = /\.json$/i.test(file.name) ? JSON.parse(source) : fromFountain(source, file.name);
     if (!validateDocument(imported)) throw new Error('Invalid backup');
-    // Imported IDs are replaced to prevent collisions with existing documents or elements.
-    imported.id = crypto.randomUUID(); imported.blocks.forEach(b => { b.id = crypto.randomUUID(); });
-    imported.updatedAt = Date.now();
-    persist(); docs.push(imported); activeId = imported.id; search = ''; $('#scene-search').value = ''; renderDocument(); persist(); closeModal(); toast('Screenplay imported. Welcome back to the page.');
-  } catch { toast('Could not open this file. Choose a Fountain, text, or FreeScript JSON file.'); }
+    addImported(imported);
+  } catch (error) { toast(error?.message?.startsWith('PDF:') ? error.message : 'Could not open this file. Choose an unlocked PDF, Fountain, text, or FreeScript JSON file.'); }
   event.target.value = '';
 };
 function focusMode() {
@@ -293,7 +315,7 @@ $('#mobile-menu').onclick = () => document.body.classList.toggle('show-sidebar')
 let zoom = 100;
 $('#zoom').onclick = () => { zoom = zoom === 100 ? 115 : zoom === 115 ? 85 : 100; $('#zoom').innerHTML = `${zoom}% ${icon('down', 12)}`; $('#paper').style.zoom = zoom / 100; };
 function help() {
-  openModal(`<div class="modal-eyebrow">A LITTLE HELP</div><h2>Stay in the story.</h2><p>FreeScript handles the formatting. You bring the words.</p><div class="shortcuts"><span>Next screenplay element</span><kbd>Enter</kbd><span>Change element type</span><kbd>Tab / Shift Tab</kbd><span>New line within an element</span><kbd>Shift Enter</kbd><span>New screenplay</span><kbd>⌘ N</kbd><span>Import screenplay</span><kbd>⌘ O</kbd><span>Export / save a backup</span><kbd>⌘ S</kbd><span>Export PDF</span><kbd>⌘ P</kbd><span>Focus mode</span><kbd>⌘ Shift F</kbd></div><div class="help-note"><strong>Your words belong to you.</strong><p>Scripts autosave on this Mac. Export backups regularly to keep an extra copy. FreeScript works offline, with no account or subscription.</p><p>Page counts are estimates. PDF export creates the final pagination. Fountain import supports common screenplay elements; advanced Fountain markup is preserved as plain text or skipped for notes and sections.</p></div><div class="modal-actions"><button class="primary" data-close>Back to writing</button></div>`);
+  openModal(`<div class="modal-eyebrow">A LITTLE HELP</div><h2>Stay in the story.</h2><p>FreeScript handles the formatting. You bring the words.</p><div class="shortcuts"><span>Next screenplay element</span><kbd>Enter</kbd><span>Change element type</span><kbd>Tab / Shift Tab</kbd><span>New line within an element</span><kbd>Shift Enter</kbd><span>New screenplay</span><kbd>⌘ N</kbd><span>Import screenplay</span><kbd>⌘ O</kbd><span>Export / save a backup</span><kbd>⌘ S</kbd><span>Export PDF</span><kbd>⌘ P</kbd><span>Focus mode</span><kbd>⌘ Shift F</kbd></div><div class="help-note"><strong>Your words belong to you.</strong><p>Scripts autosave on this Mac. Export backups regularly to keep an extra copy. FreeScript works offline, with no account or subscription.</p><p>Page counts are estimates. PDF export creates the final pagination. Paste a script or import a text-based PDF to keep editing. Scanned PDFs need text recognition first. Automatic formatting may need adjustments. Fountain import supports common screenplay elements; advanced Fountain markup is preserved as plain text or skipped for notes and sections.</p></div><div class="modal-actions"><button class="primary" data-close>Back to writing</button></div>`);
 }
 $('#help').onclick = help;
 let lastFocus;

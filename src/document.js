@@ -67,8 +67,8 @@ export function fromFountain(source, filename = 'Imported screenplay') {
     if (/^\.(?!\.)/.test(text) || /^(INT\.?|EXT\.?|INT\.?\/EXT\.?|I\/E\.?|EST\.?)\s/i.test(text)) {
       type = 'scene'; value = text.replace(/^\./, ''); inDialogue = false;
     } else if (text.startsWith('!')) { value = text.slice(1); inDialogue = false; }
-    else if (text.startsWith('>') || /TO:$/.test(text)) { type = 'transition'; value = text.replace(/^>\s*/, ''); inDialogue = false; }
-    else if (text.startsWith('@') || (separated && /^[A-Z][A-Z0-9 ._'’()\-]+$/.test(text) && lines[index + 1]?.trim())) {
+    else if (text.startsWith('>') || /TO:$/.test(text) || /^(?:FADE IN:|FADE OUT[.:]?|FADE TO BLACK[.:]?)$/i.test(text)) { type = 'transition'; value = text.replace(/^>\s*/, ''); inDialogue = false; }
+    else if (text.startsWith('@') || (/^[A-Z][A-Z0-9 ._'’()\-]{0,39}$/.test(text) && !/[.!?:]$/.test(text) && lines[index + 1]?.trim() && !/^(?:INT\.?|EXT\.?)\s/i.test(lines[index + 1].trim()) && (separated || inDialogue || /^\s{2,}/.test(lines[index])))) {
       type = 'character'; value = text.replace(/^@/, ''); inDialogue = true;
     } else if (inDialogue) { type = /^\(.*\)$/.test(text) ? 'parenthetical' : 'dialogue'; }
     const previous = doc.blocks.at(-1);

@@ -1,6 +1,6 @@
 {
   "name": "freescript",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Free, offline screenwriting for Mac.",
   "main": "electron/main.cjs",
   "scripts": {
@@ -27,6 +27,7 @@
     "@playwright/test": "^1.64.1",
     "electron": "^45.0.0",
     "electron-builder": "^26.18.0",
+    "pdfjs-dist": "^6.4.299",
     "vite": "^8.3.5"
   }
 }

@@ -10,7 +10,7 @@ Use `https://freescript-ai-companion.onrender.com/mcp` as a custom MCP plugin/co
 
 ## Download for Mac
 
-Download **[FreeScript for Mac (.dmg)](https://github.com/taylordrew4u2/FreeScript/releases/latest/download/FreeScript-1.0.2-Mac-universal.dmg)**.
+Download **[FreeScript for Mac (.dmg)](https://github.com/taylordrew4u2/FreeScript/releases/latest/download/FreeScript-1.0.3-Mac-universal.dmg)**.
 
 Requires **macOS 13 Ventura or later**. One universal installer supports Apple Silicon and Intel Macs. The release is tested on Apple Silicon; Intel execution has not been tested on physical hardware.
 
@@ -24,7 +24,8 @@ Requires **macOS 13 Ventura or later**. One universal installer supports Apple S
 - **Enter** creates the next screenplay element. **Tab / Shift Tab** changes its type.
 - Scene navigation and search, multiple screenplays, focus mode, zoom, and undo/redo.
 - Local autosave; export a FreeScript JSON backup to keep an independent copy.
-- Import Fountain, plain text, or FreeScript JSON backups.
+- Paste a complete script to automatically format editable screenplay elements.
+- Import text-based PDFs, Fountain, plain text, or FreeScript JSON backups. Scanned PDFs need text recognition first; review inferred formatting after import.
 - Export editable Fountain or a US Letter PDF with a title page.
 - Native Mac menus, keyboard shortcuts, file save dialogs, and spellcheck.
 
