@@ -2,21 +2,23 @@
 
 ![FreeScript — Your story. Your page. Free screenwriting for Mac.](branding/promotional/readme-hero.png)
 
-**Your story. Your page.** A free, offline screenplay editor for Mac. Paste a draft or import a text-based PDF, then keep writing in a cream-paper, dark-ink workspace.
+**Your story. Your page.** Write your screenplay easily, with formatting that follows as you write. FreeScript is a free, offline Mac editor with a simple cream-paper, dark-ink workspace.
 
 **[Download for Mac (.dmg)](https://github.com/taylordrew4u2/FreeScript/releases/download/v1.0.3/FreeScript-1.0.3-Mac-universal.dmg)** · **[Watch the demos](https://customtechbuilt4u.com/work/freescript/#project-promotion)** · **[ChatGPT & Claude setup](integrations/README.md)** · **[Brand & press kit](https://github.com/taylordrew4u2/FreeScript/releases/tag/brand-kit-v1)**
 
 Free desktop software. No account or subscription required for the Mac editor. Your drafts autosave on your Mac.
 
-## From an existing script to the next scene
+## Write your screenplay. Let the formatting follow.
 
-1. **Bring your draft.** Use **Paste a script**, or **Import PDF or screenplay** for a PDF with selectable text, Fountain, plain text, or a FreeScript JSON backup.
-2. **Find the format.** FreeScript recognizes common scene headings, action, character cues, dialogue, parentheticals, and transitions. Review the result and adjust an element with the format menu or Tab.
-3. **Keep writing.** Navigate scenes, search, enter focus mode, undo edits, and export Fountain, a JSON backup, or a US Letter screenplay PDF with a title page.
+1. **Start writing.** Create a screenplay and write your first scene. FreeScript applies screenplay styling to scene headings, action, character cues, dialogue, parentheticals, and transitions.
+2. **Keep the formatting simple.** Press Enter to move to the next screenplay element. Use Tab or the format menu to change its type. Spend your time on the story instead of adjusting margins and spacing.
+3. **Keep your story moving.** Navigate scenes, search, enter focus mode, and let your draft autosave locally. Export Fountain, a JSON backup, or a formatted screenplay PDF when ready.
 
-| Paste your script | Keep writing |
+Already have a draft? **Paste a script** or import a text-based PDF, Fountain, plain text, or a FreeScript backup, then review the formatting and continue writing. Scanned PDFs need OCR first.
+
+| Your writing room | Screenplay formatting made easy |
 | --- | --- |
-| ![Actual app: paste a fictional script into the text box.](branding/screenshots/paste-script.png) | ![Actual app: the fictional script becomes editable screenplay elements.](branding/screenshots/formatted-script.png) |
+| ![Actual app: the screenplay writing room.](branding/screenshots/writing-room.png) | ![Actual app: the fictional script becomes editable screenplay elements.](branding/screenshots/formatted-script.png) |
 
 All product captures use fictional sample writing. No private manuscript is shown.
 
@@ -32,6 +34,7 @@ Download the [landscape MP4](https://github.com/taylordrew4u2/FreeScript/release
 
 ![Actual FreeScript Mac app: a fictional screenplay, scene navigation, format menu, local save status and export control.](branding/screenshots/writing-room.png)
 
+- Screenplay element styling as you write, with Enter and Tab shortcuts.
 - Native Mac menus, keyboard shortcuts, spellcheck, focus mode, and zoom.
 - Multiple screenplays with scene navigation, search, local autosave, and undo/redo.
 - Automatic formatting for pasted drafts and editable text-based PDF imports.

@@ -1,7 +1,7 @@
 import {_electron as electron} from '@playwright/test';
 import {writeFile,mkdir} from 'node:fs/promises';
 import {resolve} from 'node:path';
-const stages=[['Paste an existing script.','Scene headings, characters and dialogue are recognized automatically.','paste-script'],['Keep the words. Find the format.','Review the formatted draft, then keep writing.','formatted-script'],['Stay in the scene.','Focus mode clears the writing room.','focus-mode'],['Bring a PDF back to the page.','Import selectable PDF text and continue editing. Scans need OCR first.','pdf-import'],['Send the draft on its way.','Export PDF, Fountain or a complete FreeScript backup.','export-options']];
+const stages=[['Write your screenplay.','A simple writing room for scene headings, action and dialogue.','writing-room'],['Let the formatting follow.','Enter moves to the next element. Tab changes its type.','formatted-script'],['Stay in the scene.','Focus mode clears the writing room.','focus-mode'],['Bring a PDF back to the page.','Import selectable PDF text and continue editing. Scans need OCR first.','pdf-import'],['Send the draft on its way.','Export PDF, Fountain or a complete FreeScript backup.','export-options']];
 const app=await electron.launch({args:[resolve('branding/scripts/render-main.cjs')]});
 try{
  const page=await app.firstWindow();
@@ -16,7 +16,7 @@ try{
  }
  const clips=[['banner',3],['workflow-1',5],['workflow-2',5],['workflow-3',4],['workflow-4',5],['workflow-5',5],['end-card',4]];
  await writeFile('branding/video/workflow-list.txt',clips.map(([n,t])=>`file '../promotional/${n}.png'\nduration ${t}`).join('\n')+"\nfile '../promotional/end-card.png'\n");
- for (const [index,shot,title,sub] of [[1,'paste-script','Paste your script.','Bring the words you already have.'],[2,'formatted-script','Keep writing.','Editable scenes, characters and dialogue.'],[3,'pdf-import','Open a new chapter.','Import text-based PDFs. Export your next draft.']]) {
+ for (const [index,shot,title,sub] of [[1,'writing-room','Write your screenplay.','Formatting made easy while you write.'],[2,'formatted-script','Keep your story moving.','Enter for the next element. Tab to change its type.'],[3,'focus-mode','Make room for your story.','Focus on writing. Export when ready.']]) {
   await writeFile(`branding/promotional/portrait-${index}.html`,`<!doctype html><html><meta charset="utf-8"><style>*{box-sizing:border-box}body{margin:0;background:#f7f2e8;color:#342f29;font-family:'Courier New';padding:95px 65px;width:1080px;height:1920px;display:flex;flex-direction:column;gap:55px}header{font-size:42px;font-weight:bold;letter-spacing:-2px;border-bottom:1px solid #cfc4b2;padding-bottom:35px}h1{font-size:108px;line-height:1.1;letter-spacing:-6px;margin:70px 0 10px;font-weight:normal}img{width:100%;border:1px solid #cfc4b2;box-shadow:0 20px 40px #342f2912}p{font-size:39px;line-height:1.5}footer{margin-top:auto;font-size:27px;line-height:1.6}</style><body><header>FreeScript / 0${index}</header><h1>${title}</h1><img src="../screenshots/${shot}.png"><p>${sub}</p><footer>Free screenwriting for Mac.<br>Your story. Your page.<br><small>Real app captures · Fictional sample</small></footer></body></html>`);
   await page.setViewportSize({width:1080,height:1920});
   await page.goto('file://'+resolve(`branding/promotional/portrait-${index}.html`));
