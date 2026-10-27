@@ -1,0 +1,34 @@
+appId: com.freescript.desktop
+productName: FreeScript
+copyright: Copyright © 2026 FreeScript contributors
+directories:
+  output: release
+  buildResources: build
+files:
+  - dist/**/*
+  - electron/**/*
+  - package.json
+mac:
+  category: public.app-category.productivity
+  minimumSystemVersion: '13.0'
+  icon: build/icon.icns
+  identity: '-'
+  target:
+    - target: dmg
+      arch:
+        - universal
+dmg:
+  title: FreeScript
+  backgroundColor: '#f0f2eb'
+  window:
+    width: 540
+    height: 360
+  contents:
+    - x: 140
+      y: 170
+      type: file
+    - x: 400
+      y: 170
+      type: link
+      path: /Applications
+artifactName: '${productName}-${version}-Mac-${arch}.${ext}'
