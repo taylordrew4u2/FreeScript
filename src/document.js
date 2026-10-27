@@ -47,6 +47,9 @@ export function fromFountain(source, filename = 'Imported screenplay') {
   const doc = createDocument(filename.replace(/\.[^.]+$/, ''));
   doc.blocks = [];
   const lines = source.replace(/\r\n?/g, '\n').split('\n');
+  const indentation = line => (line?.match(/^\s*/)?.[0] || '').replace(/\t/g, '    ').length;
+  const indentedCue = i => indentation(lines[i]) >= 2 && indentation(lines[i + 1]) > 0 && indentation(lines[i + 1]) < indentation(lines[i]) && /^[A-Z][A-Z0-9 ._'’()\-]{0,39}$/.test(lines[i].trim()) && !/[.!?:]$/.test(lines[i].trim());
+  const hasIndentedCues = lines.some((_, i) => indentedCue(i));
   let index = 0;
   if (/^(title|author|credit|draft date|contact|copyright|source):/i.test(lines[0] || '')) {
     while (index < lines.length && lines[index].trim()) {
@@ -68,7 +71,7 @@ export function fromFountain(source, filename = 'Imported screenplay') {
       type = 'scene'; value = text.replace(/^\./, ''); inDialogue = false;
     } else if (text.startsWith('!')) { value = text.slice(1); inDialogue = false; }
     else if (text.startsWith('>') || /TO:$/.test(text) || /^(?:FADE IN:|FADE OUT[.:]?|FADE TO BLACK[.:]?)$/i.test(text)) { type = 'transition'; value = text.replace(/^>\s*/, ''); inDialogue = false; }
-    else if (text.startsWith('@') || (/^[A-Z][A-Z0-9 ._'’()\-]{0,39}$/.test(text) && !/[.!?:]$/.test(text) && lines[index + 1]?.trim() && !/^(?:INT\.?|EXT\.?)\s/i.test(lines[index + 1].trim()) && (separated || inDialogue || /^\s{2,}/.test(lines[index])))) {
+    else if (text.startsWith('@') || (/^[A-Z][A-Z0-9 ._'’()\-]{0,39}$/.test(text) && !/[.!?:]$/.test(text) && lines[index + 1]?.trim() && !/^(?:INT\.?|EXT\.?)\s/i.test(lines[index + 1].trim()) && (hasIndentedCues ? indentedCue(index) : separated))) {
       type = 'character'; value = text.replace(/^@/, ''); inDialogue = true;
     } else if (inDialogue) { type = /^\(.*\)$/.test(text) ? 'parenthetical' : 'dialogue'; }
     const previous = doc.blocks.at(-1);

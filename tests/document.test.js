@@ -40,3 +40,9 @@ test('formats pasted indented dialogue and transitions without blank separators'
   assert.deepEqual(imported.blocks.map(b => b.type), ['transition', 'scene', 'action', 'character', 'parenthetical', 'dialogue', 'character', 'dialogue', 'transition']);
   assert.equal(imported.blocks[5].text, 'Is anyone here?');
 });
+
+test('uppercase pasted scripts distinguish action, wrapped dialogue and indented cues', () => {
+  const imported = fromFountain('INT. VAN - DAY\n\nA LONG BEAT.\nSHE LOOKS OUTSIDE.\n\n                      NANCY\n          REMEMBER WHEN WE WERE NEW AND WE\n          JUST DID RAILINGS?\n\n                      DAN\n          YEP.');
+  assert.deepEqual(imported.blocks.map(b => b.type), ['scene', 'action', 'character', 'dialogue', 'character', 'dialogue']);
+  assert.equal(imported.blocks[3].text, 'REMEMBER WHEN WE WERE NEW AND WE\nJUST DID RAILINGS?');
+});
